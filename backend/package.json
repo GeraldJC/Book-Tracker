@@ -1,0 +1,14 @@
+{
+  "name": "book-tracker-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "description": "AWS Lambda backend for Book Tracker.",
+  "scripts": {
+    "test": "node --check src/books.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.609.0",
+    "@aws-sdk/util-dynamodb": "^3.609.0"
+  }
+}

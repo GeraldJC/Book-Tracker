@@ -1,0 +1,154 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Book Tracker serverless app with Cognito, API Gateway, Lambda and DynamoDB.
+
+Globals:
+  Function:
+    Runtime: nodejs20.x
+    Timeout: 10
+    MemorySize: 128
+    Architectures:
+      - x86_64
+    Environment:
+      Variables:
+        TABLE_NAME: !Ref BooksTable
+
+Resources:
+  BookTrackerUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: book-tracker-users
+      UsernameAttributes:
+        - email
+      AutoVerifiedAttributes:
+        - email
+      Schema:
+        - Name: given_name
+          AttributeDataType: String
+          Mutable: true
+          Required: true
+        - Name: family_name
+          AttributeDataType: String
+          Mutable: true
+          Required: true
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireLowercase: true
+          RequireUppercase: true
+          RequireNumbers: true
+          RequireSymbols: true
+
+  BookTrackerUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: book-tracker-web-client
+      UserPoolId: !Ref BookTrackerUserPool
+      GenerateSecret: false
+      ExplicitAuthFlows:
+        - ALLOW_USER_PASSWORD_AUTH
+        - ALLOW_USER_SRP_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+
+  BooksTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: book-tracker-books
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: userId
+          AttributeType: S
+        - AttributeName: bookId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: userId
+          KeyType: HASH
+        - AttributeName: bookId
+          KeyType: RANGE
+
+  BookTrackerApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      Auth:
+        Authorizers:
+          CognitoAuthorizer:
+            IdentitySource: "$request.header.Authorization"
+            JwtConfiguration:
+              issuer: !Sub "https://cognito-idp.${AWS::Region}.amazonaws.com/${BookTrackerUserPool}"
+              audience:
+                - !Ref BookTrackerUserPoolClient
+        DefaultAuthorizer: CognitoAuthorizer
+
+  BooksFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: book-tracker-books-api
+      Handler: src/books.handler
+      CodeUri: backend/
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref BooksTable
+      Events:
+        ListBooks:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref BookTrackerApi
+            Path: /books
+            Method: GET
+        CreateBook:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref BookTrackerApi
+            Path: /books
+            Method: POST
+        GetBook:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref BookTrackerApi
+            Path: /books/{bookId}
+            Method: GET
+        UpdateBook:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref BookTrackerApi
+            Path: /books/{bookId}
+            Method: PUT
+        DeleteBook:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref BookTrackerApi
+            Path: /books/{bookId}
+            Method: DELETE
+        OptionsBooks:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref BookTrackerApi
+            Path: /books
+            Method: OPTIONS
+            Auth:
+              Authorizer: NONE
+        OptionsBook:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref BookTrackerApi
+            Path: /books/{bookId}
+            Method: OPTIONS
+            Auth:
+              Authorizer: NONE
+
+Outputs:
+  Region:
+    Description: AWS region used by the stack.
+    Value: !Ref AWS::Region
+  UserPoolId:
+    Description: Cognito User Pool ID.
+    Value: !Ref BookTrackerUserPool
+  UserPoolClientId:
+    Description: Cognito Web Client ID.
+    Value: !Ref BookTrackerUserPoolClient
+  ApiUrl:
+    Description: API Gateway base URL.
+    Value: !Sub "https://${BookTrackerApi}.execute-api.${AWS::Region}.amazonaws.com"
+  BooksTableName:
+    Description: DynamoDB table name.
+    Value: !Ref BooksTable

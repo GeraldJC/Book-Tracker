@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book Tracker</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="https://unpkg.com/aws-amplify@4.3.28/dist/aws-amplify.min.js"></script>
+    <script src="./config.js"></script>
+    <script defer src="./app.js"></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">AWS Serverless</p>
+        <h1>Book Tracker</h1>
+      </div>
+      <div id="userBar" class="user-bar hidden">
+        <div>
+          <span class="muted-label">Sesion activa</span>
+          <strong id="userName">Usuario</strong>
+        </div>
+        <button id="logoutButton" class="ghost" type="button">Cerrar sesion</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="authView" class="auth-layout">
+        <div class="intro">
+          <p class="eyebrow">Book Tracker</p>
+          <h2>Controla tu progreso de lectura</h2>
+          <p>
+            Registra libros, actualiza paginas leidas y consulta tu biblioteca personal.
+          
+          </p>
+        </div>
+
+        <div class="auth-panel">
+          <div class="tabs" role="tablist" aria-label="Opciones de autenticacion">
+            <button id="loginTab" class="tab active" type="button">Ingresar</button>
+            <button id="signupTab" class="tab" type="button">Registrarse</button>
+          </div>
+
+          <form id="loginForm" class="stack">
+            <label>
+              Correo
+              <input name="email" type="email" autocomplete="email" required />
+            </label>
+            <label>
+              Contrasena
+              <input name="password" type="password" autocomplete="current-password" required />
+            </label>
+            <button type="submit">Iniciar sesion</button>
+          </form>
+
+          <form id="signupForm" class="stack hidden">
+            <div class="split">
+              <label>
+                Nombre
+                <input name="name" type="text" autocomplete="given-name" required />
+              </label>
+              <label>
+                Apellido
+                <input name="lastname" type="text" autocomplete="family-name" required />
+              </label>
+            </div>
+            <label>
+              Correo
+              <input name="email" type="email" autocomplete="email" required />
+            </label>
+            <label>
+              Contrasena
+              <input name="password" type="password" autocomplete="new-password" required />
+            </label>
+            <button type="submit">Crear cuenta</button>
+          </form>
+
+          <form id="confirmForm" class="stack hidden">
+            <p class="notice">Te enviamos un codigo de confirmacion al correo registrado.</p>
+            <label>
+              Codigo
+              <input name="code" type="text" inputmode="numeric" maxlength="6" required />
+            </label>
+            <button type="submit">Confirmar cuenta</button>
+          </form>
+        </div>
+      </section>
+
+      <section id="appView" class="app-layout hidden">
+        <aside class="side-panel">
+          <h2 id="formTitle">Agregar libro</h2>
+          <form id="bookForm" class="stack">
+            <input name="bookId" type="hidden" />
+            <label>
+              Titulo
+              <input name="title" type="text" required />
+            </label>
+            <label>
+              Autor
+              <input name="author" type="text" required />
+            </label>
+            <label>
+              Genero
+              <select name="genre" required>
+                <option value="Ficcion">Ficcion</option>
+                <option value="No ficcion">No ficcion</option>
+                <option value="Fantasia">Fantasia</option>
+                <option value="Ciencia ficcion">Ciencia ficcion</option>
+                <option value="Misterio">Misterio</option>
+                <option value="Romance">Romance</option>
+                <option value="Historia">Historia</option>
+                <option value="Educativo">Educativo</option>
+              </select>
+            </label>
+            <div class="split">
+              <label>
+                Paginas
+                <input name="totalPages" type="number" min="1" required />
+              </label>
+              <label>
+                Leidas
+                <input name="pagesRead" type="number" min="0" value="0" required />
+              </label>
+            </div>
+            <div class="actions">
+              <button id="saveBookButton" type="submit">Guardar</button>
+              <button id="cancelEditButton" class="ghost hidden" type="button">Cancelar</button>
+            </div>
+          </form>
+        </aside>
+
+        <section class="library">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Biblioteca</p>
+              <h2>Mis libros</h2>
+            </div>
+            <button id="refreshButton" class="ghost" type="button">Actualizar</button>
+          </div>
+          <div class="stats-grid" aria-label="Estadisticas de lectura">
+            <div class="stat-card">
+              <span>Total libros</span>
+              <strong id="totalBooksStat">0</strong>
+            </div>
+            <div class="stat-card">
+              <span>Terminados</span>
+              <strong id="finishedBooksStat">0</strong>
+            </div>
+            <div class="stat-card">
+              <span>Progreso promedio</span>
+              <strong id="averageProgressStat">0%</strong>
+            </div>
+          </div>
+          <div class="filters" aria-label="Filtros de biblioteca">
+            <label>
+              Buscar
+              <input id="searchInput" type="search" placeholder="Titulo o autor" autocomplete="off" />
+            </label>
+            <label>
+              Genero
+              <select id="genreFilter">
+                <option value="all">Todos los generos</option>
+              </select>
+            </label>
+          </div>
+          <div id="bookList" class="book-grid"></div>
+        </section>
+      </section>
+    </main>
+
+    <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+  </body>
+</html>
