@@ -10,6 +10,7 @@ Aplicacion web sencilla para registrar libros y controlar progreso de lectura us
 - AWS Lambda para la logica del backend
 - Amazon DynamoDB para guardar los libros
 - AWS IAM para permisos entre Lambda y DynamoDB
+- AWS Amplify Hosting para publicar el frontend
 
 ## Requisitos
 
@@ -19,7 +20,7 @@ Para desarrollar y desplegar necesitas:
 - Node.js 20 o superior
 - AWS CLI configurado con tu cuenta
 - AWS SAM CLI
-- Git opcional
+- Git
 
 No compartas tus claves de AWS por chat. Configuralas localmente con AWS CLI.
 
@@ -75,7 +76,7 @@ window.APP_CONFIG = {
 };
 ```
 
-Despues puedes abrir `frontend/index.html` en el navegador.
+Despues puedes abrir `frontend/index.html` en el navegador o publicarlo con Amplify Hosting.
 
 ## Probar flujo
 
@@ -103,7 +104,7 @@ Este proyecto usa servicios con capa gratuita, pero AWS puede cobrar si superas 
 
 Puedes explicar que la aplicacion sigue este flujo:
 
-1. El usuario entra al frontend.
+1. El usuario entra al frontend publicado en Amplify Hosting.
 2. Cognito registra o autentica al usuario.
 3. El frontend obtiene un token JWT.
 4. El frontend llama a API Gateway con ese token.
