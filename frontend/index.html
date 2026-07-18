@@ -17,10 +17,10 @@
       </div>
       <div id="userBar" class="user-bar hidden">
         <div>
-          <span class="muted-label">Sesion activa</span>
+          <span class="muted-label">Sesión activa</span>
           <strong id="userName">Usuario</strong>
         </div>
-        <button id="logoutButton" class="ghost" type="button">Cerrar sesion</button>
+        <button id="logoutButton" class="ghost" type="button">Cerrar sesión</button>
       </div>
     </header>
 
@@ -29,11 +29,11 @@
         <div class="intro">
           <p class="eyebrow">Book Tracker</p>
           <h2>Controla tu progreso de lectura</h2>
-          <p>Registra libros, actualiza paginas leidas y consulta tu biblioteca personal.</p>
+          <p>Registra libros, actualiza páginas leídas y consulta tu biblioteca personal.</p>
         </div>
 
         <div class="auth-panel">
-          <div class="tabs" role="tablist" aria-label="Opciones de autenticacion">
+          <div class="tabs" role="tablist" aria-label="Opciones de autenticación">
             <button id="loginTab" class="tab active" type="button">Ingresar</button>
             <button id="signupTab" class="tab" type="button">Registrarse</button>
           </div>
@@ -44,11 +44,11 @@
               <input name="email" type="email" autocomplete="email" required />
             </label>
             <label>
-              Contrasena
+              Contraseña
               <input name="password" type="password" autocomplete="current-password" required />
             </label>
-            <button type="submit">Iniciar sesion</button>
-            <button id="forgotPasswordLink" class="text-button" type="button">Olvidaste la contrasena?</button>
+            <button type="submit">Iniciar sesión</button>
+            <button id="forgotPasswordLink" class="text-button" type="button">¿Olvidaste la contraseña?</button>
           </form>
 
           <form id="signupForm" class="stack hidden">
@@ -67,52 +67,52 @@
               <input name="email" type="email" autocomplete="email" required />
             </label>
             <label>
-              Contrasena
+              Contraseña
               <input name="password" type="password" autocomplete="new-password" required />
             </label>
             <label>
-              Confirmar contrasena
+              Confirmar contraseña
               <input name="confirmPassword" type="password" autocomplete="new-password" required />
             </label>
             <button type="submit">Crear cuenta</button>
           </form>
 
           <form id="confirmForm" class="stack hidden">
-            <p class="notice">Te enviamos un codigo de confirmacion al correo registrado.</p>
+            <p class="notice">Te enviamos un código de confirmación al correo registrado.</p>
             <label>
-              Codigo
+              Código
               <input name="code" type="text" inputmode="numeric" maxlength="6" required />
             </label>
             <button type="submit">Confirmar cuenta</button>
           </form>
 
           <form id="forgotPasswordForm" class="stack hidden">
-            <p class="notice">Ingresa tu correo y te enviaremos un codigo para cambiar tu contrasena.</p>
+            <p class="notice">Ingresa tu correo y te enviaremos un código para cambiar tu contraseña.</p>
             <label>
               Correo
               <input name="email" type="email" autocomplete="email" required />
             </label>
             <div class="actions">
-              <button type="submit">Enviar codigo</button>
+              <button type="submit">Enviar código</button>
               <button id="backToLoginButton" class="ghost" type="button">Volver</button>
             </div>
           </form>
 
           <form id="resetPasswordForm" class="stack hidden">
-            <p class="notice">Revisa tu correo, escribe el codigo y define una nueva contrasena.</p>
+            <p class="notice">Revisa tu correo, escribe el código y define una nueva contraseña.</p>
             <label>
-              Codigo
+              Código
               <input name="code" type="text" inputmode="numeric" maxlength="6" required />
             </label>
             <label>
-              Nueva contrasena
+              Nueva contraseña
               <input name="password" type="password" autocomplete="new-password" required />
             </label>
             <label>
-              Confirmar nueva contrasena
+              Confirmar nueva contraseña
               <input name="confirmPassword" type="password" autocomplete="new-password" required />
             </label>
-            <button type="submit">Cambiar contrasena</button>
+            <button type="submit">Cambiar contraseña</button>
           </form>
         </div>
       </section>
@@ -123,7 +123,7 @@
           <form id="bookForm" class="stack">
             <input name="bookId" type="hidden" />
             <label>
-              Titulo
+              Título
               <input name="title" type="text" required />
             </label>
             <label>
@@ -131,12 +131,12 @@
               <input name="author" type="text" required />
             </label>
             <label>
-              Genero
+              Género
               <select name="genre" required>
-                <option value="Ficcion">Ficcion</option>
-                <option value="No ficcion">No ficcion</option>
-                <option value="Fantasia">Fantasia</option>
-                <option value="Ciencia ficcion">Ciencia ficcion</option>
+                <option value="Ficcion">Ficción</option>
+                <option value="No ficcion">No ficción</option>
+                <option value="Fantasia">Fantasía</option>
+                <option value="Ciencia ficcion">Ciencia ficción</option>
                 <option value="Misterio">Misterio</option>
                 <option value="Romance">Romance</option>
                 <option value="Historia">Historia</option>
@@ -145,11 +145,11 @@
             </label>
             <div class="split">
               <label>
-                Paginas
+                Páginas
                 <input name="totalPages" type="number" min="1" required />
               </label>
               <label>
-                Leidas
+                Leídas
                 <input name="pagesRead" type="number" min="0" value="0" required />
               </label>
             </div>
@@ -168,7 +168,7 @@
             </div>
             <button id="refreshButton" class="ghost" type="button">Actualizar</button>
           </div>
-          <div class="stats-grid" aria-label="Estadisticas de lectura">
+          <div class="stats-grid" aria-label="Estadísticas de lectura">
             <div class="stat-card">
               <span>Total libros</span>
               <strong id="totalBooksStat">0</strong>
@@ -185,12 +185,12 @@
           <div class="filters" aria-label="Filtros de biblioteca">
             <label>
               Buscar
-              <input id="searchInput" type="search" placeholder="Titulo o autor" autocomplete="off" />
+              <input id="searchInput" type="search" placeholder="Título o autor" autocomplete="off" />
             </label>
             <label>
-              Genero
+              Género
               <select id="genreFilter">
-                <option value="all">Todos los generos</option>
+                <option value="all">Todos los géneros</option>
               </select>
             </label>
           </div>

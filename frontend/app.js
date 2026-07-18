@@ -169,7 +169,7 @@ const renderGenreOptions = () => {
   const genres = [...new Set(allBooks.map((book) => book.genre).filter(Boolean))].sort();
 
   els.genreFilter.innerHTML = [
-    `<option value="all">Todos los generos</option>`,
+    `<option value="all">Todos los géneros</option>`,
     ...genres.map((genre) => `<option value="${escapeHtml(genre)}">${escapeHtml(genre)}</option>`),
   ].join("");
 
@@ -178,7 +178,7 @@ const renderGenreOptions = () => {
 
 const renderBooks = (books) => {
   if (!allBooks.length) {
-    els.bookList.innerHTML = `<div class="empty">Todavia no tienes libros registrados.</div>`;
+    els.bookList.innerHTML = `<div class="empty">Todavía no tienes libros registrados.</div>`;
     return;
   }
 
@@ -200,7 +200,7 @@ const renderBooks = (books) => {
             <p>${author} &middot; ${genre}</p>
           </div>
           <div>
-            <p>${book.pagesRead} de ${book.totalPages} paginas</p>
+            <p>${book.pagesRead} de ${book.totalPages} páginas</p>
             <div class="progress" aria-label="Progreso ${percent}%">
               <span style="width: ${percent}%"></span>
             </div>
@@ -240,9 +240,9 @@ els.loginForm.addEventListener("submit", async (event) => {
     await Auth.signIn(form.email.value.trim(), form.password.value);
     form.reset();
     await showApp();
-    showToast("Sesion iniciada.");
+    showToast("Sesión iniciada.");
   } catch (error) {
-    showToast(error.message || "No se pudo iniciar sesion.");
+    showToast(error.message || "No se pudo iniciar sesión.");
   }
 });
 
@@ -252,7 +252,7 @@ els.signupForm.addEventListener("submit", async (event) => {
   pendingSignupEmail = form.email.value.trim();
 
   if (form.password.value !== form.confirmPassword.value) {
-    showToast("Las contrasenas no coinciden.");
+    showToast("Las contraseñas no coinciden.");
     return;
   }
 
@@ -284,9 +284,9 @@ els.forgotPasswordForm.addEventListener("submit", async (event) => {
     await Auth.forgotPassword(pendingResetEmail);
     form.reset();
     showResetPassword();
-    showToast("Codigo enviado. Revisa tu correo.");
+    showToast("Código enviado. Revisa tu correo.");
   } catch (error) {
-    showToast(error.message || "No se pudo enviar el codigo.");
+    showToast(error.message || "No se pudo enviar el código.");
   }
 });
 
@@ -295,7 +295,7 @@ els.resetPasswordForm.addEventListener("submit", async (event) => {
   const form = event.currentTarget;
 
   if (form.password.value !== form.confirmPassword.value) {
-    showToast("Las contrasenas no coinciden.");
+    showToast("Las contraseñas no coinciden.");
     return;
   }
 
@@ -308,9 +308,9 @@ els.resetPasswordForm.addEventListener("submit", async (event) => {
     form.reset();
     pendingResetEmail = "";
     setAuthTab("login");
-    showToast("Contrasena actualizada. Ya puedes iniciar sesion.");
+    showToast("Contraseña actualizada. Ya puedes iniciar sesión.");
   } catch (error) {
-    showToast(error.message || "No se pudo cambiar la contrasena.");
+    showToast(error.message || "No se pudo cambiar la contraseña.");
   }
 });
 
@@ -332,7 +332,7 @@ els.logoutButton.addEventListener("click", async () => {
   await Auth.signOut();
   resetBookForm();
   showAuth();
-  showToast("Sesion cerrada.");
+  showToast("Sesión cerrada.");
 });
 
 els.bookForm.addEventListener("submit", async (event) => {
@@ -379,7 +379,7 @@ els.bookList.addEventListener("click", async (event) => {
     if (action === "delete") {
       const book = allBooks.find((item) => item.bookId === bookId);
       const title = book?.title || "este libro";
-      const confirmed = window.confirm(`Deseas eliminar "${title}"? Esta accion no se puede deshacer.`);
+      const confirmed = window.confirm(`¿Deseas eliminar "${title}"? Esta acción no se puede deshacer.`);
       if (!confirmed) return;
 
       await apiFetch(`/books/${encodeURIComponent(bookId)}`, { method: "DELETE" });
@@ -399,7 +399,7 @@ els.bookList.addEventListener("click", async (event) => {
     els.cancelEditButton.classList.remove("hidden");
     window.scrollTo({ top: 0, behavior: "smooth" });
   } catch (error) {
-    showToast(error.message || "No se pudo completar la accion.");
+    showToast(error.message || "No se pudo completar la acción.");
   }
 });
 
