@@ -16,6 +16,10 @@ const els = {
   loginForm: document.querySelector("#loginForm"),
   signupForm: document.querySelector("#signupForm"),
   confirmForm: document.querySelector("#confirmForm"),
+  forgotPasswordForm: document.querySelector("#forgotPasswordForm"),
+  resetPasswordForm: document.querySelector("#resetPasswordForm"),
+  forgotPasswordLink: document.querySelector("#forgotPasswordLink"),
+  backToLoginButton: document.querySelector("#backToLoginButton"),
   userBar: document.querySelector("#userBar"),
   userName: document.querySelector("#userName"),
   logoutButton: document.querySelector("#logoutButton"),
@@ -33,6 +37,7 @@ const els = {
 };
 
 let pendingSignupEmail = "";
+let pendingResetEmail = "";
 let allBooks = [];
 
 const showToast = (message) => {
@@ -69,6 +74,26 @@ const setAuthTab = (tab) => {
   els.loginForm.classList.toggle("hidden", !isLogin);
   els.signupForm.classList.toggle("hidden", isLogin);
   els.confirmForm.classList.add("hidden");
+  els.forgotPasswordForm.classList.add("hidden");
+  els.resetPasswordForm.classList.add("hidden");
+};
+
+const showForgotPassword = () => {
+  els.loginTab.classList.remove("active");
+  els.signupTab.classList.remove("active");
+  els.loginForm.classList.add("hidden");
+  els.signupForm.classList.add("hidden");
+  els.confirmForm.classList.add("hidden");
+  els.resetPasswordForm.classList.add("hidden");
+  els.forgotPasswordForm.classList.remove("hidden");
+};
+
+const showResetPassword = () => {
+  els.loginForm.classList.add("hidden");
+  els.signupForm.classList.add("hidden");
+  els.confirmForm.classList.add("hidden");
+  els.forgotPasswordForm.classList.add("hidden");
+  els.resetPasswordForm.classList.remove("hidden");
 };
 
 const getToken = async () => {
@@ -204,6 +229,8 @@ const loadBooks = async () => {
 
 els.loginTab.addEventListener("click", () => setAuthTab("login"));
 els.signupTab.addEventListener("click", () => setAuthTab("signup"));
+els.forgotPasswordLink.addEventListener("click", showForgotPassword);
+els.backToLoginButton.addEventListener("click", () => setAuthTab("login"));
 
 els.loginForm.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -224,6 +251,11 @@ els.signupForm.addEventListener("submit", async (event) => {
   const form = event.currentTarget;
   pendingSignupEmail = form.email.value.trim();
 
+  if (form.password.value !== form.confirmPassword.value) {
+    showToast("Las contrasenas no coinciden.");
+    return;
+  }
+
   try {
     await Auth.signUp({
       username: pendingSignupEmail,
@@ -240,6 +272,45 @@ els.signupForm.addEventListener("submit", async (event) => {
     showToast("Revisa tu correo para confirmar la cuenta.");
   } catch (error) {
     showToast(error.message || "No se pudo crear la cuenta.");
+  }
+});
+
+els.forgotPasswordForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  pendingResetEmail = form.email.value.trim();
+
+  try {
+    await Auth.forgotPassword(pendingResetEmail);
+    form.reset();
+    showResetPassword();
+    showToast("Codigo enviado. Revisa tu correo.");
+  } catch (error) {
+    showToast(error.message || "No se pudo enviar el codigo.");
+  }
+});
+
+els.resetPasswordForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+
+  if (form.password.value !== form.confirmPassword.value) {
+    showToast("Las contrasenas no coinciden.");
+    return;
+  }
+
+  try {
+    await Auth.forgotPasswordSubmit(
+      pendingResetEmail,
+      form.code.value.trim(),
+      form.password.value
+    );
+    form.reset();
+    pendingResetEmail = "";
+    setAuthTab("login");
+    showToast("Contrasena actualizada. Ya puedes iniciar sesion.");
+  } catch (error) {
+    showToast(error.message || "No se pudo cambiar la contrasena.");
   }
 });
 
